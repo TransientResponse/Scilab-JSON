@@ -52,6 +52,21 @@ function JSON = JSONWrite(s)
         end
         buf = buf + "]";
         JSON = buf;
+    elseif typeof(s) == "polynomial" then
+        temp = coeff(s);
+        N = length(temp);
+        for i = 1:N do
+            if i == 1 then
+                buf = ascii(34) + string(temp(i));
+            else
+                if temp(i) > 0 then
+                    buf = buf + msprintf(" + %s*s^%d", string(temp(i)), i-1);
+                else
+                    buf = buf + msprintf(" %s*s^%d", string(temp(i)), i-1);
+                end
+            end
+        end
+        JSON = buf + ascii(34);
     elseif ismatrix(s) then
         buf = "[";
         N = size(s)(1);
