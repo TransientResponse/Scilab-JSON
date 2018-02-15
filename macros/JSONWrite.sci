@@ -36,6 +36,22 @@ function JSON = JSONWrite(s)
         end
     elseif type(s) == 10 then
         JSON = msprintf('""%s""', s);
+    elseif typeof(s) == "ce" then
+        buf = "[";
+        N = size(s)(1);
+        if N == 1 then N = size(s)(2); end
+        for i = 1:N
+            if i > 1 then
+                buf = buf + ",";
+            end
+            if size(s) > [1 1] then
+                buf = buf + JSONWrite(s{i,:});
+            else
+                buf = buf + JSONWrite(s{i});
+            end
+        end
+        buf = buf + "]";
+        JSON = buf;
     elseif ismatrix(s) then
         buf = "[";
         N = size(s)(1);
