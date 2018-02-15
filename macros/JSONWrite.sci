@@ -1,7 +1,7 @@
 // A simple JSON Writer
 
 function JSON = JSONWrite(s)
-    if isstruct(s) then
+    if isstruct(s) || (typeof(s) == "state-space") then
         fields = fieldnames(s)';
         NF = size(fields)(2);
         buf = "{";
@@ -12,12 +12,17 @@ function JSON = JSONWrite(s)
             end
             
             buf = buf + msprintf('""%s"":', fields(i));
-            val = getfield(i+2, s);
+            if(isstruct(s)) then
+                val = getfield(i+2, s);
+            else
+                val = getfield(i+1,s);
+            end
+            
             buf = buf + JSONWrite(val);
         end
         buf = buf + "}";
         JSON = buf;
-    elseif type(s) == 4 then
+    elseif type(s) == 4 then //boolean
         if s then
             JSON = "true";
         else
